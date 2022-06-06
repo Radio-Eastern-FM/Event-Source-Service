@@ -2,7 +2,7 @@ import random
 
 from paho.mqtt import client as mqtt_client
 
-from settings import MQTT_CONFIGURATION as config
+from event_source.settings import MQTT_CONFIGURATION as config
 
 class MQTT:
   # Init a unique MQTT identifier
@@ -13,7 +13,7 @@ class MQTT:
   def connect():
     def on_connect(client, userdata, flags, rc):
       if rc == 0:
-        print("Connected to MQTT Broker!")
+        print(f"Connected. ID = {MQTT.client_id}")
       else:
         raise ConnectionError("Failed to connect to MQTT, return code %d\n", rc)
     
@@ -21,8 +21,9 @@ class MQTT:
     MQTT.client.on_connect = on_connect
     try:
       MQTT.client.connect(config['host'], config['port'])
+      print(f"Connecting to MQTT Broker {config['host']}:{config['port']}")
       return True
-    except (ConnectionRefusedError): 
+    except (ConnectionRefusedError or TimeoutError): 
       print('Couldn\'t connect to MQTT broker');
       return False
   
