@@ -1,7 +1,7 @@
 import json
 import urllib
 
-from event_source.addons.addon import Addon
+from addons.addon import Addon
 
 class WeatherAddon(Addon):
   @staticmethod

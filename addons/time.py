@@ -1,7 +1,7 @@
 import socket
 import struct
 import time
-from event_source.addons.addon import Addon
+from addons.addon import Addon
 
 class TimeAddon(Addon):
   @staticmethod

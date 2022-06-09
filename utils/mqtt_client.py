@@ -2,7 +2,7 @@ import random
 
 from paho.mqtt import client as mqtt_client
 
-from event_source.settings import MQTT_CONFIGURATION as config
+from settings import MQTT_CONFIGURATION as config
 
 class MQTT:
   # Init a unique MQTT identifier

@@ -1,5 +1,5 @@
-from event_source.addons.time import TimeAddon
-from event_source.addons.weather import WeatherAddon
+from addons.time import TimeAddon
+from addons.weather import WeatherAddon
 
 TimeAddon.config = dict(
   ntpServer = 'au.pool.ntp.org',
@@ -24,7 +24,15 @@ defaultMQTT = dict(
   mqttID = 'master'
 )
 
-MQTT_CONFIGURATION = defaultMQTT
+dockerMQTT = dict(
+  host = 'mqtt',
+  port = 1883,
+  username = '',
+  password = '',
+  mqttID = 'master'
+)
+
+MQTT_CONFIGURATION = dockerMQTT
 
 ADDONS = [
   TimeAddon,
