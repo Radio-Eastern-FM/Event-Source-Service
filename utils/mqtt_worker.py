@@ -21,7 +21,6 @@ class MQTTWorker(threading.Thread):
     # Catch termination signals and stop the worker
     signal.signal(signal.SIGTERM, self.stop())
     signal.signal(signal.SIGINT, self.stop())
-    signal.signal(signal.SIGHUP, self.stop())
   
   def run(self):
     while not self.event.is_set():
