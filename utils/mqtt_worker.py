@@ -44,7 +44,7 @@ class MQTTWorker(threading.Thread):
       self.event.wait(self.interval)
   
   def stop(self):
-    print(f"Stopping {topic} thread")
+    print(f"Stopping {self.topic} thread")
     self.event.set()
   
   @staticmethod
