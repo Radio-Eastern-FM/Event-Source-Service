@@ -16,8 +16,8 @@ class MQTTWorker(threading.Thread):
     # Add the new thread to the static workers list
     MQTTWorker.workers.append(self)
     
-    # Catch a SIGTERM signal (terminate) and stop the worker
-    signal.signal(signal.SIGTERM, lambda: self.stop())
+    # Catch a SIGKILL signal (terminate) and stop the worker
+    signal.signal(signal.SIGKILL, lambda: self.stop())
   
   def run(self):
     try:
