@@ -16,10 +16,8 @@ def main():
   MQTTWorker.startAll()
   
   # Run forever
-  MQTTWorkerThread = Thread(target = MQTTWorker.loop())
-  MQTTWorkerThread.start()
-  
-  MQTTWorkerThread.join()
+  MQTTWorker.loop()
+
 
 # Run the service if this is the main module
 if __name__ == '__main__':

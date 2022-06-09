@@ -14,13 +14,11 @@ class MQTTWorker(threading.Thread):
     self.interval = interval
     self.topic = topic
     MQTTWorker.client = client
+    MQTTWorker.exit = Event()
     
     # Add the new thread to the static workers list
     MQTTWorker.workers.append(self)
     
-    # Catch termination signals and stop the worker
-    signal.signal(signal.SIGTERM, self.stop())
-    signal.signal(signal.SIGINT, self.stop())
   
   def run(self):
     while not self.event.is_set():
@@ -61,10 +59,12 @@ class MQTTWorker(threading.Thread):
   # Infinite loop
   @staticmethod
   def loop():
-    while True: #
-      try:
-        time.sleep(0.05) # 50ms
-      except KeyboardInterrupt:
-        MQTTWorker.stopAll()
-        MQTTWorker.client.disconnect()
-        return
+    # Catch termination signals and stop the worker upon their occurence
+    signal.signal(signal.SIGTERM, lambda signo, _frame: MQTTWorker.exit.set())
+    signal.signal(signal.SIGINT, lambda signo, _frame: MQTTWorker.exit.set())
+    
+    while not MQTTWorker.exit.is_set():
+      MQTTWorker.exit.wait(0.05) # 50ms
+    
+    MQTTWorker.stopAll()
+    MQTTWorker.client.disconnect()
