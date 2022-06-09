@@ -32,7 +32,7 @@ dockerMQTT = dict(
   mqttID = 'master'
 )
 
-MQTT_CONFIGURATION = defaultMQTT
+MQTT_CONFIGURATION = dockerMQTT
 
 ADDONS = [
   TimeAddon,
