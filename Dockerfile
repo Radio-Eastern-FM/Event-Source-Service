@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "-u", "/usr/src/app/__main__.py" ]
+ENTRYPOINT [ "python", "-u", "/usr/src/app/__main__.py" ]

@@ -1,9 +1,11 @@
 import threading
 import time
 import signal
+from threading import Event
 
 class MQTTWorker(threading.Thread):
   workers = []
+  
   def __init__(self, client, function, interval, topic):
     threading.Thread.__init__(self)
     
@@ -16,35 +18,33 @@ class MQTTWorker(threading.Thread):
     # Add the new thread to the static workers list
     MQTTWorker.workers.append(self)
     
-    # Catch a SIGTERM signal (terminate) and stop the worker
-    signal.signal(signal.SIGTERM, lambda: self.stop())
+    # Catch termination signals and stop the worker
+    signal.signal(signal.SIGTERM, self.stop())
+    signal.signal(signal.SIGINT, self.stop())
+    signal.signal(signal.SIGHUP, self.stop())
   
   def run(self):
-    try:
-      while not self.event.is_set():
-        # Get actual message from the worker function
-        msg = self.function()
-        
-        # Publish to MQTT
-        result = MQTTWorker.client.publish(self.topic, msg)
-        # Get the response status
-        status = result[0]
-        
-        # If message sending went OK, print message and topic
-        if status == 0:
-          print(f"Send '{(msg[:40] + '...') if len(str(msg)) > 40 else msg}' to topic '{self.topic}'")
-        # If message sending failed, print error and further details
-        else:
-          print(f"Failed to send message to topic {self.topic}. Message:\n\n{msg}")
-        
-        # Wait for an interval and kill all if KeyboardInterrupt
-        self.event.wait(self.interval)
-    
-    # If a KeyboardInterrupt occurs, we kill all threads
-    except KeyboardInterrupt:
-      self.stop()
+    while not self.event.is_set():
+      # Get actual message from the worker function
+      msg = self.function()
+      
+      # Publish to MQTT
+      result = MQTTWorker.client.publish(self.topic, msg)
+      # Get the response status
+      status = result[0]
+      
+      # If message sending went OK, print message and topic
+      if status == 0:
+        print(f"Send '{(msg[:40] + '...') if len(str(msg)) > 40 else msg}' to topic '{self.topic}'")
+      # If message sending failed, print error and further details
+      else:
+        print(f"Failed to send message to topic {self.topic}. Message:\n\n{msg}")
+      
+      # Wait for an interval
+      self.event.wait(self.interval)
   
   def stop(self):
+    print(f"Stopping {topic} thread")
     self.event.set()
   
   @staticmethod
