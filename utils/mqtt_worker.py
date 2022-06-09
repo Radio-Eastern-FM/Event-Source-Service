@@ -1,5 +1,6 @@
 import threading
 import time
+import signal
 
 class MQTTWorker(threading.Thread):
   workers = []
@@ -14,6 +15,9 @@ class MQTTWorker(threading.Thread):
     
     # Add the new thread to the static workers list
     MQTTWorker.workers.append(self)
+    
+    # Catch a SIGINT signal (terminate) and stop the worker
+    signal.signal(signal.SIGINT, lambda: self.stop())
   
   def run(self):
     try:
