@@ -8,7 +8,7 @@ TimeAddon.config = dict(
 )
 
 WeatherAddon.config = dict(
-  openWeatherApiKey = '38bba49521d037c5dad46062dbe1008a',
+  openWeatherApiKey = '',
   lat = -37.79616776238214,
   lon = 145.2922194203585,
   
