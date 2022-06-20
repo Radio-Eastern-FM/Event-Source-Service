@@ -12,7 +12,7 @@ WeatherAddon.config = dict(
   openWeatherApiKey = os.getenv('OPEN_WEATHER_API_KEY'),
   lat = -37.79616776238214,
   lon = 145.2922194203585,
-  interval = 30,
+  interval = 300,
   topic = 'efm/weather'
 )
 
